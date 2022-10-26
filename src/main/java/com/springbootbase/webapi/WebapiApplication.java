@@ -3,6 +3,8 @@ package com.springbootbase.webapi;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties;
+
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
 
@@ -12,6 +14,7 @@ import io.swagger.v3.oas.annotations.info.Info;
 	version = "1.0",
 	description = "Base Spring Boot API that is used to collect dependencies for a base project"
 ))
+@EnableEncryptableProperties
 public class WebapiApplication {
 
 	public static void main(String[] args) {

@@ -9,7 +9,10 @@
       "name": "Launch WebapiApplication",
       "request": "launch",
       "mainClass": "com.springbootbase.webapi.WebapiApplication",
-      "projectName": "webapi"
+      "projectName": "webapi",
+      "env": {
+        "JASYPT_ENCRYPTOR_PASSWORD": "secretkey"
+      }
     }
   ]
 }
