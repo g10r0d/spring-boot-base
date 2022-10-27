@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
+
 @RestController
 public class BaseController {
 	
@@ -33,6 +34,7 @@ public class BaseController {
 			}
 		)
 	})
+
 	@GetMapping(value = "/v1/version", headers = "Accept=application/json", produces = "application/json")
 	public ResponseEntity<ApiResponse<VersionModel>> version(HttpServletRequest request) {
 		ApiResponse<VersionModel> apiResponse = baseService.version(request);
