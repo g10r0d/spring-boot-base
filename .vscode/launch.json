@@ -11,7 +11,13 @@
       "mainClass": "com.springbootbase.webapi.WebapiApplication",
       "projectName": "webapi",
       "env": {
-        "JASYPT_ENCRYPTOR_PASSWORD": "secretkey"
+        "JASYPT_ENCRYPTOR_PASSWORD": "secretkey",
+        "SPRINGBOOTBASE_KEYSTORE_FILE":"keystore.jks",
+        "SPRINGBOOTBASE_KEYSTORE_PASSWORD":"changeit",
+        "SPRINGBOOTBASE_KEY_ALIAS":"localhost",
+        "SPRINGBOOTBASE_KEY_PASSWORD":"changeit",
+        "SPRINGBOOTBASE_TRUSTSTORE_FILE":"truststore.jks",
+        "SPRINGBOOTBASE_TRUSTSTORE_PASSWORD":"changeit"
       }
     }
   ]

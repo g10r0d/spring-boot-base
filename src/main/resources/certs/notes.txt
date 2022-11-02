@@ -1,0 +1,82 @@
+1) openssl req -x509 -sha256 -days 3650 -newkey rsa:4096 -keyout rootCA.key -out rootCA.crt
+ a) Password: changeit
+ Generating a 4096 bit RSA private key
+.................++
+.............................................++
+writing new private key to 'rootCA.key'
+Enter PEM pass phrase:
+Verifying - Enter PEM pass phrase:
+-----
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,
+If you enter '.', the field will be left blank.
+-----
+Country Name (2 letter code) []:US
+State or Province Name (full name) []:DC
+Locality Name (eg, city) []:Washington DC
+Organization Name (eg, company) []:basespringboot.com                
+Organizational Unit Name (eg, section) []:research
+Common Name (eg, fully qualified host name) []:C02X61RLJGH7
+Email Address []:rodriguez_carlos@bah.com
+
+2) Server-side certificate: openssl req -new -newkey rsa:4096 -out localhost.csr -keyout localhost.key
+  a) Password: changeit
+  writing new private key to 'localhost.key'
+Enter PEM pass phrase:
+Verifying - Enter PEM pass phrase:
+-----
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,
+If you enter '.', the field will be left blank.
+-----
+Country Name (2 letter code) []:US
+State or Province Name (full name) []:DC
+Locality Name (eg, city) []:Washington DC
+Organization Name (eg, company) []:basespringboot.com
+Organizational Unit Name (eg, section) []:research
+Common Name (eg, fully qualified host name) []:localhost
+Email Address []:
+
+Please enter the following 'extra' attributes
+to be sent with your certificate request
+A challenge password []:
+
+3) Create a localhost.ext file with the following information
+authorityKeyIdentifier=keyid,issuer
+basicConstraints=CA:FALSE
+subjectAltName = @alt_names
+[alt_names]
+DNS.1 = localhost
+
+4) Sign the request with out rootCA.crt certificate and its private key
+  $ openssl x509 -req -CA rootCA.crt -CAkey rootCA.key -in localhost.csr -out localhost.crt -days 365 -CAcreateserial -extfile localhost.ext
+  a) use password for rootCA certificate
+
+4.1) Human readable certificate
+  a) openssl x509 -in localhost.crt -text
+
+5) Import to keystore
+  a) Create bundle localhost.crt and localhost.key in single file: PKCS 12 archive (localhost.p12)
+    $ openssl pkcs12 -export -out localhost.p12 -name "localhost" -inkey localhost.key -in localhost.crt
+  b) Create Keystore file repository
+    $ keytool -importkeystore -srckeystore localhost.p12 -srcstoretype PKCS12 -destkeystore keystore.jks -deststoretype JKS
+
+-----Until here the SSL is enabled
+-----From here the Mutual Authentication starts
+6) Create Truststore (holds the certificates of the external entities that we trust)
+$ keytool -import -trustcacerts -noprompt -alias ca -ext san=dns:localhost,ip:127.0.0.1 -file rootCA.crt -keystore truststore.jks
+
+7) Create Client-side certificate
+$ openssl req -new -newkey rsa:4096 -nodes -keyout clientBob.key -out clientBob.csr
+ - CN: Bob
+8) Sign the request with our CA
+$ openssl x509 -req -CA rootCA.crt -CAkey rootCA.key -in clientBob.csr -out clientBob.crt -days 365 -CAcreateserial
+
+9) Package the signed certificate and the private key into the PKCS file
+$ openssl pkcs12 -export -out clientBob.p12 -name "clientBob" -inkey clientBob.key -in clientBob.crt
