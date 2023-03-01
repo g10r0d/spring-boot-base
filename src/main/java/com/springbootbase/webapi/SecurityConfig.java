@@ -37,14 +37,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			}
 			String apikey = (String)authentication.getPrincipal();
 			if (authentication.getPrincipal() != null && this.tokenKey.equals(apikey)) {
-				// Credentials validate the user
-				if (authentication.getCredentials() == null) {
-					throw new BadCredentialsException("Access Denied");
-				}
-				String userId = authentication.getCredentials().toString();
-				System.out.println(userId);
-				//Validate userId
-				
 				authentication.setAuthenticated(true);
 				return authentication;
 			} else {
