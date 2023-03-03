@@ -40,4 +40,10 @@ public class BaseController {
 		ApiResponse<VersionModel> apiResponse = baseService.version(request);
 		return new ResponseEntity<ApiResponse<VersionModel>>(apiResponse, HttpStatus.OK);
 	}
+
+	@GetMapping(value = "/health", headers = "Accept=application/json", produces = "application/json")
+	public ResponseEntity<ApiResponse<VersionModel>> health(HttpServletRequest request) {
+		ApiResponse<VersionModel> apiResponse = baseService.version(request);
+		return new ResponseEntity<ApiResponse<VersionModel>>(apiResponse, HttpStatus.OK);
+	}
 }

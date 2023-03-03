@@ -44,7 +44,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			}
 		});
 
-		http.antMatcher("/v?/**")
+		http.authorizeRequests()
+			.antMatchers("/health")
+			.permitAll()
+		.and()
+		.antMatcher("/v?/**")
 		.csrf().disable()
 		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		.and()
